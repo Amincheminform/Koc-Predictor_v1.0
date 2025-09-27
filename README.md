@@ -1,21 +1,20 @@
-# **About the KidneyTox v1.0**
+# **About the Koc-Predictor**
 
-<img src="https://github.com/Amincheminform/KidneyTox_v1.0/blob/main/KidneyTox_logo.jpg?raw=1" alt= “Amincheminfom_logo” width="350" align="right">
+<img src="https://github.com/Amincheminform/Koc-Predictor_v1.0/blob/main/Koc-Predictor.jpg?raw=1" alt= “Amincheminfom_logo” width="350" align="right">
 
-**KidneyTox v1.0** is an easy-to-use predictive tool for evaluating the **nephrotoxicity** (kidney toxicity) of small molecules.
+**Koc-Predictor v1.0** is a tool that provides an interactive and comprehensive platform for predicting the soil organic carbon normalized sorption coefficient (Koc) of small molecules.
 
-It is a <img src="https://streamlit.io/images/brand/streamlit-mark-color.svg" alt="Streamlit Logo" width="50"/>-based [Web Application](https://kidneytoxv1.streamlit.app/) that predicts the **kidney toxicity** of a small molecule and also visualizes the molecule with the contribution of the features in the prediction.
-
----
-This tool is a part of the article "*KidneyTox_v1: A Machine Learning-based Tool for Predicting Nephrotoxicity of Molecule*" (Manuscript under preparation).
+It is a <img src="https://streamlit.io/images/brand/streamlit-mark-color.svg" alt="Streamlit Logo" width="50"/>-based [Web Application](https://koc-predictorv1.streamlit.app/) that predicts the **soil organic carbon normalized sorption coefficient (Koc)** of a small molecule and also visualizes the molecule.
 
 ---
-The **KidneyTox v1.0** web application can be used by following [This Link](https://kidneytoxv1.streamlit.app/).
-
-Either sketch the molecule or enter a SMILES string to predict its **nephrotoxicity** (kidney toxicity)!
+This tool is a part of the article "*Koc-Predictor: A machine learning-based tool for predicting soil organic carbon normalized sorption coefficient of molecule*" (Manuscript under preparation).
 
 ---
-<img src="https://github.com/Amincheminfom/Amincheminfom/blob/main/Amincheminfom1.gif?raw=1" alt= “Amincheminfom_logo” width="250" align="right">
+The **Koc-Predictor v1.0** web application can be used by following [This Link](https://koc-predictorv1.streamlit.app/).
+
+Either sketch the molecule or enter a SMILES string to predict its **soil organic carbon normalized sorption coefficient (Koc)**!
+
+---
 
 Example SMILES string:
 
@@ -28,4 +27,4 @@ Cc1ccc(NC(=O)c2ccc(CN3CCN(C)CC3)cc2)cc1Nc1nccc(-c2cccnc2)n1
 
 ---
 
-Bugs: If you encounter any bugs, please report the issue to my mail id pharmacist.amin@gmail.com
+Bugs: If you encounter any bugs, please report the issue to my email address pharmacist.amin@gmail.com
