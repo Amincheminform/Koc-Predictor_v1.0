@@ -12,9 +12,10 @@ from sklearn.metrics import accuracy_score
 
 # Author : Dr. Sk. Abdul Amin
 # [Details](https://www.scopus.com/authid/detail.uri?authorId=57190176332).
-# Date : 28/09/2025
+# Date : 28/09/2025, 13/10/2025
 # logo_url = "https://raw.githubusercontent.com/Amincheminform/phKMOi_v1/main/phKMOi_v1_logo.jpg"
-logo_url = "https://raw.githubusercontent.com/Amincheminform/Koc-Predictor_v1.0/main/Koc-Predictor.jpg"
+logo_url = "https://raw.githubusercontent.com/Amincheminform/Koc-Predictor_v1.0/main/Koc-WebPredictor_Logo.jpg"
+# https://github.com/Amincheminform/Koc-Predictor_v1.0/blob/main/Koc-WebPredictor_Logo.jpg
 
 calc = Calculator(descriptors, ignore_3D=True)
 
@@ -26,13 +27,13 @@ def smiles_to_descriptors(smiles):
     return mol, descriptor_df
 
 st.set_page_config(
-    page_title="Koc-Predictor",
+    page_title="Koc-WebPredictor",
     layout="wide",
     page_icon=logo_url
 )
 
 st.sidebar.image(logo_url)
-st.sidebar.success("Thank you for using Koc-Predictor")
+st.sidebar.success("Thank you for using Koc-WebPredictor")
 model_choice = st.sidebar.selectbox("Select Model", ["Classification Model", "Regression Model"])
 
 # Descriptor columns
@@ -109,7 +110,7 @@ elif model_choice == "Regression Model":
 
 st.markdown("""
     <h1 style='text-align: center; font-size: 3.2em; color: #2C3E50;'>
-        K<sub>OC</sub>-Predictor
+        K<sub>OC</sub>-WebPredictor
     </h1>
 """, unsafe_allow_html=True)
 
@@ -117,8 +118,17 @@ st.subheader("Draw or Enter Your Molecule")
 drawn_smiles = st_ketcher()
 manual_smiles = st.text_input("Or enter SMILES manually:", value=drawn_smiles if drawn_smiles else "")
 
+prediction_done = False
+
 if manual_smiles:
     st.markdown(f"**Detected SMILES:** `{manual_smiles}`")
+    # mol, descriptor_df = smiles_to_descriptors(manual_smiles)
+
+    if not prediction_done:
+        st.markdown("**SMILES successfully loaded!**")
+        st.markdown("**Some calculations may take up to 30 seconds.**")
+        st.markdown("**Thank you for your patience!**")
+
     mol, descriptor_df = smiles_to_descriptors(manual_smiles)
 
     if mol:
@@ -135,12 +145,46 @@ if manual_smiles:
                         if desc_ready.shape[1] != len(classification_descriptor_columns):
                             st.warning("Some descriptors missing; prediction may be less accurate.")
                         y_pred = classification_model.predict(desc_ready)[0]
+                        prediction_done = True
                         sorption_class = "High sorption to soil" if y_pred == 1 else "Low sorption to soil"
                         color = "red" if y_pred == 1 else "green"
                         st.markdown(
                             f"<h2 style='color:{color};'>Predicted Class: {sorption_class}</h2>",
                             unsafe_allow_html=True
                         )
+
+                        X_external = pd.DataFrame(desc_ready, columns=classification_descriptor_columns)
+                        X_combined_external = np.vstack((X_train, X_external.to_numpy()))
+                        Amin_H_external = X_combined_external @ np.linalg.pinv(
+                            X_combined_external.T @ X_combined_external) @ X_combined_external.T
+                        external_leverage = np.diag(Amin_H_external)[len(X_train):]
+
+                        p = X_train.shape[1]
+                        n = X_train.shape[0]
+                        leverage_threshold = 3 * p / n
+                        external_ad_flags = external_leverage <= leverage_threshold
+
+                        st.markdown("### Applicability Domain (AD) Analysis")
+
+                        if external_ad_flags[0]:
+                            st.markdown(
+                                "<b>Applicability Domain:</b> <span style='color:green;'>Within AD</span>",
+                                unsafe_allow_html=True
+                            )
+                        else:
+                            st.markdown(
+                                "<b>Applicability Domain:</b> <span style='color:red;'>Outside AD</span>",
+                                unsafe_allow_html=True
+                            )
+
+                        st.markdown(
+                            "NOTE: A molecule <b>'Within AD'</b> means its structural descriptors fall within the reliable chemical space "
+                            "of the training set, and predictions are considered reliable. "
+                            "A molecule <b>'Outside AD'</b> may have structural features not well represented in the training data; "
+                            "its prediction should be interpreted with caution.",
+                            unsafe_allow_html=True
+                        )
+
                     except Exception as e:
                         st.error(f"Classification prediction failed: {e}")
 
@@ -159,14 +203,43 @@ if manual_smiles:
 
                             import math
                             koc1 = 10 ** y_pred if not math.isnan(y_pred) else float('nan')
-
                             result_df = pd.DataFrame({
                                 'Property': ['Predicted Log10(Koc)', 'Predicted Koc (Lit/Kg)'],
                                 'Value': [round(y_pred, 2), round(koc1, 2)]
                             })
-
+                            prediction_done = True
                             st.subheader("Prediction Summary")
                             st.table(result_df)
+
+                            X_external = pd.DataFrame(desc_ready, columns=regression_descriptor_columns)
+                            X_combined_external = np.vstack((X_train, X_external.to_numpy()))
+                            Amin_H_external = X_combined_external @ np.linalg.pinv(
+                                X_combined_external.T @ X_combined_external) @ X_combined_external.T
+                            external_leverage = np.diag(Amin_H_external)[len(X_train):]
+
+                            p = X_train.shape[1]
+                            n = X_train.shape[0]
+                            leverage_threshold = 3 * p / n
+                            external_ad_flags = external_leverage <= leverage_threshold
+                            st.markdown("### Applicability Domain (AD) Analysis")
+
+                            if external_ad_flags[0]:
+                                st.markdown(
+                                    "<b>Applicability Domain:</b> <span style='color:green;'>Within AD</span>",
+                                    unsafe_allow_html=True
+                                )
+                            else:
+                                st.markdown(
+                                    "<b>Applicability Domain:</b> <span style='color:red;'>Outside AD</span>",
+                                    unsafe_allow_html=True
+                                )
+                            st.markdown(
+                                "NOTE: A molecule <b>'Within AD'</b> means its structural descriptors fall within the reliable chemical space "
+                                "of the training set, and predictions are considered reliable. "
+                                "A molecule <b>'Outside AD'</b> may have structural features not well represented in the training data; "
+                                "its prediction should be interpreted with caution.",
+                                unsafe_allow_html=True
+                            )
                     except Exception as e:
                         st.error(f"Regression prediction failed: {e}")
             else:
