@@ -1,16 +1,16 @@
-# **About the Koc-Predictor**
+# **About the Koc-WebPredictor**
 
-<img src="https://github.com/Amincheminform/Koc-Predictor_v1.0/blob/main/Koc-Predictor.jpg?raw=1" alt= “Amincheminfom_logo” width="350" align="right">
+<img src="https://github.com/Amincheminform/Koc-Predictor_v1.0/blob/main/Koc-WebPredictor_Logo.jpg?raw=1" alt= “Amincheminfom_logo” width="350" align="right">
 
-**Koc-Predictor v1.0** is a tool that provides an interactive and comprehensive platform for predicting the soil organic carbon normalized sorption coefficient (Koc) of small molecules.
+**Koc-WebPredictor v1.0** is a tool that provides an interactive and comprehensive platform for predicting the soil organic carbon normalized sorption coefficient (Koc) of small molecules.
 
 It is a <img src="https://streamlit.io/images/brand/streamlit-mark-color.svg" alt="Streamlit Logo" width="50"/>-based [Web Application](https://koc-predictorv1.streamlit.app/) that predicts the **soil organic carbon normalized sorption coefficient (Koc)** of a small molecule and also visualizes the molecule.
 
 ---
-This tool is a part of the article "*Koc-Predictor: A machine learning-based tool for predicting soil organic carbon normalized sorption coefficient of molecule*" (Manuscript under preparation).
+This tool is a part of the article "*KOC-WebPredictor: An Open-Access Tool for Prediction and Insights into Soil Sorption*" (Manuscript under preparation).
 
 ---
-The **Koc-Predictor v1.0** web application can be used by following [This Link](https://koc-predictorv1.streamlit.app/).
+The **Koc-WebPredictor v1.0** web application can be used by following [This Link](https://koc-predictorv1.streamlit.app/).
 
 Either sketch the molecule or enter a SMILES string to predict its **soil organic carbon normalized sorption coefficient (Koc)**!
 
